@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Lista de Productos</title>
+  <link rel="stylesheet" th:href="@{/css/products.css}">
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="main">
+  <h1>Lista de Productos</h1>
+  <aside class="aside">
+    <h3 class="filters__title">Filtros</h3>
+
+    <form class="filters" th:action="@{/products}" method="get">
+      <div class="filter">
+        <label class="filter__label" for="q">Buscar</label>
+        <input class="filter__input" type="text" id="q" name="q"
+               placeholder="Nombre o descripción"
+               th:value="${param.q}">
+      </div>
+
+      <!-- Categoría (opcional: poblarla desde el backend) -->
+      <div class="filter">
+        <label class="filter__label" for="category">Categoría</label>
+        <select class="filter__select" id="category" name="category">
+          <option value="" th:selected="${param.category == null}">Todas</option>
+          <option th:each="c : ${categories}"
+                  th:value="${c.id}"
+                  th:text="${c.name}"
+                  th:selected="${param.category == c.id}">Categoría</option>
+        </select>
+      </div>
+
+      <!-- Precio -->
+      <div class="filter">
+        <label class="filter__label">Precio</label>
+        <div class="filter__range">
+          <input class="filter__number" type="number" min="0" step="0.01"
+                 id="priceMin" name="priceMin" placeholder="Mín."
+                 th:value="${param.priceMin}">
+          <span class="filter__dash">—</span>
+          <input class="filter__number" type="number" min="0" step="0.01"
+                 id="priceMax" name="priceMax" placeholder="Máx."
+                 th:value="${param.priceMax}">
+        </div>
+
+        <!-- Deslizadores opcionales para UX rápida (sin romper los inputs) -->
+        <div class="range-sliders">
+          <input type="range" min="0" max="10000" step="1" id="rangeMin">
+          <input type="range" min="0" max="10000" step="1" id="rangeMax">
+          <div class="range-values">
+            <span id="rangeMinVal">S/ 0</span>
+            <span id="rangeMaxVal">S/ 10000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock -->
+      <div class="filter filter--inline">
+        <input class="filter__checkbox" type="checkbox" id="inStock" name="inStock"
+               th:checked="${param.inStock != null}">
+        <label class="filter__checklabel" for="inStock">Solo disponibles</label>
+      </div>
+
+      <!-- Orden -->
+      <div class="filter">
+        <label class="filter__label" for="sort">Ordenar por</label>
+        <select class="filter__select" id="sort" name="sort">
+          <option value="" th:selected="${param.sort == null}">Relevancia</option>
+          <option value="priceAsc" th:selected="${param.sort == 'priceAsc'}">Precio: menor a mayor</option>
+          <option value="priceDesc" th:selected="${param.sort == 'priceDesc'}">Precio: mayor a menor</option>
+          <option value="nameAsc" th:selected="${param.sort == 'nameAsc'}">Nombre: A → Z</option>
+          <option value="nameDesc" th:selected="${param.sort == 'nameDesc'}">Nombre: Z → A</option>
+        </select>
+      </div>
+
+      <div class="filter-actions">
+        <button type="submit" class="btn btn--primary">Aplicar</button>
+        <a th:href="@{/products}" class="btn btn--ghost">Limpiar</a>
+      </div>
+    </form>
+  </aside>
+  <section>
+      <div class="cart-header">
+          <a href="/cart" class="cart-link">
+              🛒 Ver Carrito (<span id="cart-count">0</span>)
+          </a>
+      </div>
+
+    <div th:if="${#lists.isEmpty(products)}">
+      <p>No hay productos disponibles.</p>
+    </div>
+
+    <div th:unless="${#lists.isEmpty(products)}">
+      <ul class="list">
+        <li th:each="product : ${products}" class="card">
+          <img class="card__image" width="400"
+               th:src="${#strings.isEmpty(product.imageUrl) ? '/img/placeholder.png' : product.imageUrl}"
+               alt="Imagen del Producto"/>
+
+          <div class="card__container">
+            <p class="card__title" th:text="${product.name}">Nombre del Producto</p>
+            <span th:text="${product.description}">Descripción</span>
+            <span th:text="${product.price}">Precio</span>
+            <span th:text="${product.stock}">Stock</span>
+          </div>
+
+          <!-- OJO: usa 'producto' aquí -->
+            <button class="card__button btn-add-cart"
+                    th:attr="data-id=${product.id},data-name=${product.name},data-price=${product.price}"
+                    th:disabled="${product.stock == 0}">
+                <span th:if="${product.stock > 0}">Añadir al carrito</span>
+                <span th:if="${product.stock == 0}">Sin stock</span>
+            </button>
+        </li>
+      </ul>
+      <div class="pagination" th:if="${page != null}">
+        <a th:if="${!page.first}"
+           th:href="@{/products(page=${page.number-1},size=${page.size},q=${param.q},category=${param.category},priceMin=${param.priceMin},priceMax=${param.priceMax},inStock=${param.inStock},sort=${param.sort})}">« Anterior</a>
+
+        <span th:text="${page.number + 1}"></span>/<span th:text="${page.totalPages}"></span>
+
+        <a th:if="${!page.last}"
+           th:href="@{/products(page=${page.number+1},size=${page.size},q=${param.q},category=${param.category},priceMin=${param.priceMin},priceMax=${param.priceMax},inStock=${param.inStock},sort=${param.sort})}">Siguiente »</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- jQuery primero -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<!-- toastr después -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<!-- tu JS -->
+<script th:src="@{/js/product.js}"></script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Usuario</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>➕ Crear Nuevo Usuario</h1>
+        <a th:href="@{/users}" class="btn btn-secondary">
+            📋 Volver a Lista
+        </a>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="form-container">
+        <form th:action="@{/users/create}" th:object="${user}" method="post">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="firstName">Nombre *</label>
+                    <input type="text" id="firstName" th:field="*{firstName}" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Apellido *</label>
+                    <input type="text" id="lastName" th:field="*{lastName}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" th:field="*{email}" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña *</label>
+                    <input type="password" id="password" th:field="*{password}" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" id="phone" th:field="*{phone}">
+                </div>
+                <div class="form-group">
+                    <label for="role">Rol *</label>
+                    <select id="role" th:field="*{role}" required>
+                        <option value="">Seleccionar rol</option>
+                        <option th:each="r : ${roles}" th:value="${r}" th:text="${r.displayName}"></option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label for="address">Dirección</label>
+                    <textarea id="address" th:field="*{address}" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" th:field="*{active}" checked>
+                        Usuario activo
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Crear Usuario</button>
+                <a th:href="@{/users}" class="btn btn-secondary">❌ Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/js/users.js"></script>
+</body>
+</html>

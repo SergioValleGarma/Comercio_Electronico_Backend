@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Orden #' + ${order.id}">Detalle de Orden</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/order-styles.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+    <h1>
+        📦 Detalle de Orden
+        <div class="order-number"># <span th:text="${order.id}"></span></div>
+    </h1>
+
+    <!-- Mensajes de éxito/error -->
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Información de la orden -->
+    <div class="order-info">
+        <h2>ℹ️ Información de la Orden</h2>
+        <table class="info-table">
+            <tr>
+                <td>🔖 Número de Orden:</td>
+                <td><strong th:text="${order.id}"></strong></td>
+            </tr>
+            <tr>
+                <td>📅 Fecha del Pedido:</td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
+            </tr>
+            <!--<tr>
+                <td>📍 Estado:</td>
+                <td>
+                    <span class="status order-status" th:classappend="'status-' + ${order.status.name().toLowerCase()}"
+                          th:text="${order.status.displayName}"></span>
+                    <button class="btn btn-secondary btn-small refresh-status-btn"
+                            th:attr="data-order-id=${order.id}">🔄 Actualizar</button>
+                </td>
+            </tr> -->
+            <tr>
+                <td>💰 Total:</td>
+                <td>
+                    <strong th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></strong>
+                </td>
+            </tr>
+            <tr>
+                <td>🚚 Dirección de Envío:</td>
+                <td th:text="${order.shippingAddress}"></td>
+            </tr>
+            <tr>
+                <td>📞 Teléfono:</td>
+                <td th:text="${order.phoneNumber}"></td>
+            </tr>
+            <tr th:if="${order.notes}">
+                <td>📝 Notas:</td>
+                <td th:text="${order.notes}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Items de la orden -->
+    <h2>📦 Productos Ordenados</h2>
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th>🛍️ Producto</th>
+            <th>💰 Precio Unitario</th>
+            <th>📊 Cantidad</th>
+            <th>💵 Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${order.orderItems}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(item.unitPrice, 1, 2)}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(item.unitPrice * item.quantity, 1, 2)}"></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="3"><strong>Total:</strong></td>
+            <td><strong th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></strong></td>
+        </tr>
+        </tfoot>
+    </table>
+
+    <!-- Acciones -->
+    <div class="actions">
+        <a href="/orders" class="btn btn-secondary">⬅️ Volver a Mis Órdenes</a>
+
+        <!-- Botón cancelar solo si se puede cancelar -->
+        <form th:if="${order.status.name() == 'PENDING' or order.status.name() == 'CONFIRMED'}"
+              th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post">
+            <button type="submit" class="btn btn-danger cancel-order-btn"
+                    th:attr="data-order-id=${order.id}">❌ Cancelar Orden</button>
+        </form>
+    </div>
+</div>
+
+<script src="/js/order-scripts.js"></script>
+</body>
+</html>

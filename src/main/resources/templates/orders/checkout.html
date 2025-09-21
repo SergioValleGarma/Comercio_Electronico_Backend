@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar Compra</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/order-styles.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+    <h1>🛒 Finalizar Compra</h1>
+
+    <!-- Mensajes de éxito/error -->
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <h2>📦 Resumen del Pedido</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Precio</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.productName}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(item.productPrice, 1, 2)}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="'$' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="total-section">
+        <h3>💰 Total a Pagar: $<span th:text="${#numbers.formatDecimal(cartTotal, 1, 2)}"></span></h3>
+        <p>Total de items: <strong th:text="${cartItemCount}"></strong></p>
+    </div>
+
+    <!-- Formulario de datos de envío -->
+    <div class="form-section">
+        <h2>🚚 Información de Envío</h2>
+        <form id="checkout-form" action="/orders/create" method="post">
+            <div class="form-group">
+                <label for="shippingAddress">Dirección de Envío *</label>
+                <textarea id="shippingAddress" name="shippingAddress" required
+                          rows="3" placeholder="Ingrese su dirección completa (calle, número, distrito, ciudad)"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="phoneNumber">Teléfono *</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber" required
+                       placeholder="Ej: 987654321" pattern="[0-9]{9,15}">
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Notas del Pedido (Opcional)</label>
+                <textarea id="notes" name="notes" rows="2"
+                          placeholder="Instrucciones especiales de entrega, horarios preferidos, etc."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <a href="/cart" class="btn btn-secondary">⬅️ Volver al Carrito</a>
+                <button type="submit" class="btn btn-primary">✅ Confirmar Pedido</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/js/order-scripts.js"></script>
+</body>
+</html>

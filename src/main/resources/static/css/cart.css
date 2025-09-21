@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Variables (reusadas de products.css)
+   ========================================================================== */
+:root {
+    --primary-color: #005f73;
+    --secondary-color: #0a9396;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --accent-success: #2a9d8f;
+    --accent-danger: #e76f51;
+    --accent-update: #28a745;
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+    --border-radius-sm: 6px;
+    --border-radius-md: 10px;
+}
+
+/* ==========================================================================
+   Layout Principal del Carrito
+   ========================================================================== */
+.cart-section {
+    grid-column: 1 / -1; /* ¡Esta es la línea clave! Ocupa todo el ancho del grid. */
+    max-width: 900px;
+    margin: 0 auto; /* Centra el contenido después de ocupar el ancho */
+    padding: 20px 0; /* Ajusta el padding para que no se pegue a los bordes */
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px 25px;
+    background: var(--card-background);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.cart-header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.btn-back {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Items del Carrito
+   ========================================================================== */
+.cart-items {
+    background: var(--card-background);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 3fr 2fr 1.5fr;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 25px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.item-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    color: var(--text-light);
+    font-size: 0.95rem;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.quantity-input {
+    width: 60px;
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ced4da;
+    border-radius: var(--border-radius-sm);
+}
+
+.item-subtotal {
+    text-align: right;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ==========================================================================
+   Botones de Acción en Items
+   ========================================================================== */
+.btn-update, .btn-remove {
+    border: none;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-sm);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: filter 0.2s ease;
+}
+
+.btn-update {
+    background-color: var(--accent-update);
+}
+
+.btn-remove {
+    background-color: var(--accent-danger);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.btn-update:hover, .btn-remove:hover {
+    filter: brightness(115%);
+}
+
+/* ==========================================================================
+   Total y Acciones Finales
+   ========================================================================== */
+.cart-total {
+    background: var(--text-dark);
+    color: white;
+    padding: 25px;
+    border-radius: var(--border-radius-md);
+    text-align: right;
+    margin-top: 30px;
+}
+
+.cart-total h3 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-primary, .btn-danger {
+    padding: 12px 25px;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-danger {
+    background-color: var(--accent-danger);
+    color: white;
+}
+.btn-danger:hover {
+    background-color: #d05432;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================================================
+   Carrito Vacío
+   ========================================================================== */
+.empty-cart {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--card-background);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.empty-cart h2 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.empty-cart p {
+    color: var(--text-light);
+    margin-bottom: 25px;
+}

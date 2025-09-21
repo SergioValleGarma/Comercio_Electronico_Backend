@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Variables y Estilos Base
+   ========================================================================== */
+:root {
+    --primary-color: #005f73;
+    --background-color: #f8f9fa;
+    --card-background: #ffffff;
+    --text-dark: #212529;
+    --text-light: #6c757d;
+    --accent-danger-bg: rgba(231, 111, 81, 0.1);
+    --accent-danger-text: #b54930;
+    --border-color: #dee2e6;
+    --shadow-sm: 0 4px 15px rgba(0,0,0,0.06);
+    --border-radius-sm: 6px;
+    --border-radius-md: 10px;
+}
+
+/* ==========================================================================
+   Barra de Navegación Principal
+   ========================================================================== */
+.navbar {
+    background-color: var(--card-background);
+    color: var(--text-dark);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 65px;
+}
+
+/* ==========================================================================
+   Marca y Enlaces de Navegación
+   ========================================================================== */
+.navbar-brand .brand-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-link {
+    color: var(--text-light);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+/* ==========================================================================
+   Sección de Usuario
+   ========================================================================== */
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info .welcome-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.user-info strong {
+    color: var(--text-dark);
+}
+
+.user-role {
+    font-size: 1.2rem;
+}
+
+/* ==========================================================================
+   Botón de Logout Directo
+   ========================================================================== */
+.logout-form-direct {
+    margin: 0;
+}
+
+.logout-btn-direct {
+    background-color: transparent;
+    color: var(--accent-danger-text);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn-direct:hover {
+    background-color: var(--accent-danger-bg);
+    border-color: var(--accent-danger-text);
+    color: var(--accent-danger-text);
+}
+
+/* ==========================================================================
+   Botón de Login para Invitados
+   ========================================================================== */
+.navbar-auth .login-link {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.navbar-auth .login-link:hover {
+    filter: brightness(110%);
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   Responsividad
+   ========================================================================== */
+@media (max-width: 768px) {
+    .user-info .welcome-text {
+        display: none; /* Oculta el saludo en pantallas pequeñas */
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-links {
+        display: none; /* Oculta los links principales en móviles */
+    }
+    .navbar-container {
+        padding: 0 15px;
+    }
+}

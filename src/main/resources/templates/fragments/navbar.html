@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+<nav th:fragment="navbar" class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">
+            <a href="/" class="brand-link">🚲 Mundo Bici</a>
+        </div>
+
+        <div class="navbar-nav" th:if="${session.userId}">
+            <div th:if="${session.userRole == 'ADMIN'}" class="nav-links">
+                <a href="/users" class="nav-link">👥 Usuarios</a>
+                <a href="/products" class="nav-link">📦 Productos</a>
+            </div>
+
+            <div th:if="${session.userRole == 'CUSTOMER'}" class="nav-links">
+                <a href="/products" class="nav-link">🛍️ Productos</a>
+                <a href="/cart" class="nav-link">🛒 Carrito</a>
+                <a href="/orders" class="nav-link">📦 Mis Pedidos</a>
+            </div>
+        </div>
+
+        <div class="navbar-user" th:if="${session.userId}">
+            <div class="user-info">
+                    <span class="welcome-text">
+                        Hola, <strong th:text="${session.userFirstName ?: session.userFullName}">Usuario</strong>
+                    </span>
+                <span class="user-role" th:text="${session.userRole == 'ADMIN' ? '👨‍💼' : '🛒'}"></span>
+            </div>
+
+            <form method="post" action="/logout" class="logout-form-direct">
+                <button type="submit" class="logout-btn-direct">
+                    🚪 Cerrar Sesión
+                </button>
+            </form>
+        </div>
+
+        <div class="navbar-auth" th:unless="${session.userId}">
+            <a href="/login" class="nav-link login-link">🔐 Iniciar Sesión</a>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

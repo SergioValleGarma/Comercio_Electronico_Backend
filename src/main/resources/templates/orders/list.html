@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Órdenes</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/order-styles.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div class="container">
+    <h1>📋 Mis Órdenes</h1>
+
+    <!-- Mensajes de éxito/error -->
+    <div th:if="${success}" class="alert alert-success">
+        <p th:text="${success}"></p>
+    </div>
+    <div th:if="${error}" class="alert alert-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <!-- Estadísticas del usuario -->
+    <div class="stats">
+        <p>📊 <strong>Total de órdenes:</strong> <span th:text="${totalUserOrders}"></span></p>
+        <p>💰 <strong>Total gastado:</strong> $<span th:text="${#numbers.formatDecimal(totalSpent, 1, 2)}"></span></p>
+    </div>
+
+    <!-- Verificar si hay órdenes -->
+    <div th:if="${#lists.isEmpty(orders)}" class="empty-orders">
+        <h2>📦 No tienes órdenes aún</h2>
+        <p>¡Explora nuestros productos y haz tu primera compra!</p>
+        <a href="/products" class="btn btn-primary">🛍️ Explorar Productos</a>
+    </div>
+
+    <!-- Lista de órdenes -->
+    <div th:if="${!#lists.isEmpty(orders)}">
+        <table>
+            <thead>
+            <tr>
+                <th>🔖 Orden #</th>
+                <th>📅 Fecha</th>
+                <!--<th>📍 Estado</th> -->
+                <th>💰 Total</th>
+                <th>📦 Items</th>
+                <th>⚙️ Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td>
+                    <strong th:text="${order.id}"></strong>
+                </td>
+                <td th:text="${#temporals.format(order.orderDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <!--<td>
+                    <span class="status" th:classappend="'status-' + ${order.status.name().toLowerCase()}"
+                          th:text="${order.status.displayName}"></span>
+                </td>-->
+                <td>
+                    <strong th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}"></strong>
+                </td>
+                <td th:text="${#lists.size(order.orderItems)} + ' productos'"></td>
+                <td>
+                    <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-primary btn-small">👁️ Ver Detalle</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <p>Página <strong th:text="${currentPage + 1}"></strong> de <strong th:text="${totalPages}"></strong></p>
+
+            <a th:if="${hasPrevious}" th:href="@{/orders(page=${currentPage - 1})}" class="btn btn-primary">⬅️ Anterior</a>
+            <a th:if="${hasNext}" th:href="@{/orders(page=${currentPage + 1})}" class="btn btn-primary">Siguiente ➡️</a>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <a href="/products" class="btn btn-primary">🛍️ Continuar Comprando</a>
+        <a href="/cart" class="btn btn-primary">🛒 Ver Carrito</a>
+    </div>
+</div>
+
+<script src="/js/order-scripts.js"></script>
+</body>
+</html>

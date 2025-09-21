@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>👥 Gestión de Usuarios</h1>
+        <a th:href="@{/users/create}" class="btn btn-primary">
+            <span>➕</span> Crear Nuevo Usuario
+        </a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success" id="successAlert">
+        <span th:text="${success}"></span>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error" id="errorAlert">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="table-container">
+        <table id="usersTable">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre Completo</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}" th:classappend="${!user.active} ? 'user-inactive'">
+                <td th:text="${user.id}"></td>
+                <td th:text="${user.fullName}"></td>
+                <td th:text="${user.email}"></td>
+                <td>
+                            <span th:class="${user.role.name() == 'ADMIN'} ? 'role-admin' : 'role-customer'"
+                                  th:text="${user.role.displayName}"></span>
+                </td>
+                <td>
+                            <span th:class="${user.active} ? 'status-active' : 'status-inactive'"
+                                  th:text="${user.active} ? 'Activo' : 'Inactivo'"></span>
+                </td>
+                <td class="actions">
+                    <a th:href="@{/users/{id}(id=${user.id})}"
+                       class="btn btn-success btn-sm"
+                       title="Ver detalles">
+                        👁️ Ver
+                    </a>
+                    <a th:href="@{/users/{id}/edit(id=${user.id})}"
+                       class="btn btn-warning btn-sm"
+                       title="Editar usuario">
+                        ✏️ Editar
+                    </a>
+                    <button type="button"
+                            class="btn btn-danger btn-sm delete-btn"
+                            th:data-user-id="${user.id}"
+                            th:data-user-name="${user.fullName}"
+                            title="Eliminar usuario">
+                        🗑️ Eliminar
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(users)}" class="no-data">
+            <p>📭 No hay usuarios registrados</p>
+            <a th:href="@{/users/create}" class="btn btn-primary">Crear primer usuario</a>
+        </div>
+    </div>
+
+    <div class="footer-nav">
+        <a th:href="@{/products}" class="btn btn-secondary">🏠 Ir a Productos</a>
+        <a th:href="@{/}" class="btn btn-secondary">🔙 Volver al Inicio</a>
+    </div>
+</div>
+
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>⚠️ Confirmar eliminación</h3>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar al usuario <strong id="userToDelete"></strong>?</p>
+            <p><small>Esta acción no se puede deshacer.</small></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancelDelete">Cancelar</button>
+            <form id="deleteForm" method="post" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/js/users.js"></script>
+</body>
+</html>

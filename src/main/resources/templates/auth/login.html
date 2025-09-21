@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Ecommerce</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<div class="login-box">
+    <h1>🚲 Mundo Bici</h1>
+
+    <!-- Mensajes -->
+    <div th:if="${success}" class="alert alert-success">
+        <span th:text="${success}"></span>
+    </div>
+
+    <div th:if="${error}" class="alert alert-error">
+        <span th:text="${error}"></span>
+    </div>
+
+    <!-- Formulario -->
+    <form method="post" action="/login" id="loginForm">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="login-btn" id="loginBtn">
+            <span id="btnText">Iniciar Sesión</span>
+            <span id="btnSpinner" class="spinner" style="display: none;">⏳</span>
+        </button>
+    </form>
+
+    <!-- Usuarios de prueba -->
+    <div class="demo-users">
+        <h4>Usuarios de Prueba:</h4>
+        <div class="demo-user" data-email="admin@ecommerce.com" data-password="password123">
+            <p><strong>Admin:</strong> admin@ecommerce.com | password123</p>
+        </div>
+        <div class="demo-user" data-email="juan@email.com" data-password="password123">
+            <p><strong>Cliente:</strong> juan@email.com | password123</p>
+        </div>
+        <div class="demo-user" data-email="maria@email.com" data-password="password123">
+            <p><strong>Cliente:</strong> maria@email.com | password123</p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles del Usuario</title>
+    <link rel="stylesheet" href="/css/navbar.css">
+    <link rel="stylesheet" href="/css/users.css">
+</head>
+<body>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container">
+    <div class="header">
+        <h1>👤 Detalles del Usuario</h1>
+        <div>
+            <a th:href="@{/users/{id}/edit(id=${user.id})}" class="btn btn-warning">
+                ✏️ Editar
+            </a>
+            <a th:href="@{/users}" class="btn btn-secondary">
+                📋 Volver a Lista
+            </a>
+        </div>
+    </div>
+
+    <div class="user-details">
+        <div class="detail-card">
+            <h3>Información Personal</h3>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>ID:</label>
+                    <span th:text="${user.id}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Nombre:</label>
+                    <span th:text="${user.firstName}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Apellido:</label>
+                    <span th:text="${user.lastName}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Nombre Completo:</label>
+                    <span th:text="${user.fullName}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <h3>Información de Contacto</h3>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Email:</label>
+                    <span th:text="${user.email}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Teléfono:</label>
+                    <span th:text="${user.phone ?: 'No especificado'}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Dirección:</label>
+                    <span th:text="${user.address ?: 'No especificada'}"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-card">
+            <h3>Información del Sistema</h3>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Rol:</label>
+                    <span th:class="${user.role.name() == 'ADMIN'} ? 'role-admin' : 'role-customer'"
+                          th:text="${user.role.displayName}"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Estado:</label>
+                    <span th:class="${user.active} ? 'status-active' : 'status-inactive'"
+                          th:text="${user.active} ? 'Activo' : 'Inactivo'"></span>
+                </div>
+                <div class="detail-item">
+                    <label>Fecha de Registro:</label>
+                    <span th:text="${#temporals.format(user.createdAt, 'dd/MM/yyyy HH:mm')}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
