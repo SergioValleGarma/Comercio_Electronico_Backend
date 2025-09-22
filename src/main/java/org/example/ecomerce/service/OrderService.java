@@ -1,6 +1,5 @@
 package org.example.ecomerce.service;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.ecomerce.controller.dto.CartItem;
@@ -122,6 +121,15 @@ public class OrderService {
     @Transactional(readOnly = true)
     public List<Order> findByStatus(OrderStatus status) {
         return orderRepository.findByStatus(status);
+    }
+
+    // ========================================
+    // MÉTODO NUEVO AGREGADO - LISTAR TODAS LAS ÓRDENES (PARA ADMIN)
+    // ========================================
+
+    @Transactional(readOnly = true)
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAllByOrderByOrderDateDesc(pageable);
     }
 
     // ========================================

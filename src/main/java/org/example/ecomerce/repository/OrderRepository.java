@@ -1,6 +1,5 @@
 package org.example.ecomerce.repository;
 
-
 import org.example.ecomerce.model.Order;
 import org.example.ecomerce.model.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -102,4 +101,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query("SELECT COUNT(DISTINCT o.userId) FROM Order o WHERE o.orderDate >= :date")
     long getUniqueCustomersCount(@Param("date") Instant date);
+
+    // ========================================
+    // MÉTODO NUEVO AGREGADO - PAGINACIÓN PARA ADMIN
+    // ========================================
+
+    @Query("SELECT o FROM Order o ORDER BY o.orderDate DESC")
+    Page<Order> findAllByOrderByOrderDateDesc(Pageable pageable);
 }
