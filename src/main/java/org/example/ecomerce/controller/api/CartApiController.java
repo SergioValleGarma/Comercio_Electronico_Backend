@@ -3,6 +3,7 @@ package org.example.ecomerce.controller.api;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.ecomerce.controller.dto.CartItem;
+import org.example.ecomerce.controller.dto.CheckoutSummaryResponse;
 import org.example.ecomerce.dto.response.ApiResponse;
 import org.example.ecomerce.dto.response.CartInfoResponse;
 import org.example.ecomerce.service.CartService;
@@ -79,5 +80,41 @@ public class CartApiController {
         
         CartInfoResponse response = new CartInfoResponse(cartItems, total, itemCount, message);
         return ApiResponse.success(response);
+    }
+
+    @GetMapping("/checkout/summary")
+    public ApiResponse<CheckoutSummaryResponse> getCheckoutSummary(HttpSession session) {
+        try {
+            List<CartItem> cartItems = cartService.getCartItems(session);
+            BigDecimal subtotal = cartService.getCartTotal(session);
+            int itemCount = cartService.getCartItemCount(session);
+
+            BigDecimal shipping = BigDecimal.valueOf(25.00);
+            BigDecimal total = subtotal.add(shipping);
+
+            CheckoutSummaryResponse summary = new CheckoutSummaryResponse(
+                    subtotal,
+                    shipping,
+                    total,
+                    itemCount,
+                    cartItems.isEmpty()
+            );
+
+            return ApiResponse.success(summary);
+
+        } catch (Exception e) {
+            return ApiResponse.error("Error al obtener resumen: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/checkout/items")
+    public ApiResponse<List<CartItem>> getCheckoutItems(HttpSession session) {
+        try {
+            List<CartItem> cartItems = cartService.getCartItems(session);
+            return ApiResponse.success(cartItems);
+
+        } catch (Exception e) {
+            return ApiResponse.error("Error al obtener items: " + e.getMessage());
+        }
     }
 }
