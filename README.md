@@ -60,7 +60,7 @@ mvn spring-boot:run
 ```
 
 ### 5. Acceder a la aplicación
-Abre tu navegador en: **[http://localhost:8080/products](http://localhost:8080/products)**
+Abre tu navegador en: **[http://localhost:8080](http://localhost:8080)**
 
 ¡Listo! 🎉 La aplicación estará ejecutándose con datos de prueba incluidos.
 
