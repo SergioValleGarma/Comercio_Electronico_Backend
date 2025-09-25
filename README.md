@@ -9,7 +9,7 @@ Tienda virtual de bicicletas con catálogo filtrable, carrito de compras y gener
 ## Pasos para ejecutar
 1. Clonar el proyecto
 ```bash
-git clone https://github.com/SebastianLl28/ecomerce-mvc.git
+git clone https://github.com/SergioValleGarma/Comercio_Electronico_Backend.git
 ````
 2. Crear la base de datos
 ```sql
